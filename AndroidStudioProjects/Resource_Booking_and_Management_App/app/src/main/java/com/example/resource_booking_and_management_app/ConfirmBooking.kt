@@ -186,6 +186,43 @@ fun ConfirmBookingScreen(onBack: () -> Unit) {
                     )
                 )
             }
+            Text(
+                text = "Total Credits: 90 Credits",
+                fontSize = 20.sp,
+                modifier = Modifier.padding(top = 30.dp, start = 5.dp)
+            )
+            Text(
+                text = "Remaining Credits After Booking: 410 Credits",
+                fontSize = 20.sp,
+                modifier = Modifier.padding(top = 20.dp, start = 5.dp)
+            )
+            Row(
+                modifier = Modifier.padding(top = 120.dp, start = 50.dp)
+            ) {
+                Button(
+                    onClick = {
+                        // Cancel action later
+                    },
+                    modifier = Modifier
+                        .width(150.dp)
+                        .height(50.dp)
+                        .padding(start = 5.dp)
+                ) {
+                    Text("Cancel")
+                }
+
+                Button(
+                    onClick = {
+                        // Click
+                    },
+                    modifier = Modifier
+                        .width(150.dp)
+                        .height(50.dp)
+                        .padding(start = 5.dp)
+                ) {
+                    Text("Confirm & Save")
+                }
+            }
         }
     }
 }
