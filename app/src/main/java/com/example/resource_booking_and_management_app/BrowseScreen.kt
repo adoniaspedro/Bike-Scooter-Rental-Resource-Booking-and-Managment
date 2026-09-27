@@ -249,7 +249,8 @@ fun BrowseScreen(modifier: Modifier = Modifier) {
 
                     TextButton(
                         onClick = {
-                            // Basket resource
+                            val intent = Intent(context, BookingBasket::class.java)
+                            context.startActivity(intent)
                         }
                     ) {
                         Text("Basket")

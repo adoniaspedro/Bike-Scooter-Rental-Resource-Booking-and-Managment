@@ -21,6 +21,9 @@
         <activity
             android:name=".BookingHistory"
             android:exported="false" />
+        <activity
+            android:name=".BookingBasket"
+            android:exported="false" />
 
         <activity
             android:name=".MainActivity"
