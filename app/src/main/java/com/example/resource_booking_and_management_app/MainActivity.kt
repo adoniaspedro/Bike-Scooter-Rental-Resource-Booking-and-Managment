@@ -17,6 +17,11 @@ import com.example.resource_booking_and_management_app.ui.theme.Resource_Booking
 import androidx.activity.viewModels
 import android.util.Log
 
+// Navigation Imports
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+
 class MainActivity : ComponentActivity() {
     private val bookingViewModel: BookingViewModel by viewModels()
 
@@ -29,11 +34,45 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Resource_Booking_and_Management_AppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    BrowseScreen(
-                        viewModel = bookingViewModel,
+
+                val navController = rememberNavController()
+
+                Scaffold(
+                    modifier = Modifier.fillMaxSize()
+                ) { innerPadding ->
+
+                    NavHost(
+                        navController = navController,
+                        startDestination = "browse",
                         modifier = Modifier.padding(innerPadding)
-                    )
+                    ) {
+
+                        composable("browse") {
+                            BrowseScreen(
+                                viewModel = bookingViewModel,
+                                modifier = Modifier,
+                                onBasketClick = {
+                                    navController.navigate("basket")
+                                }
+                            )
+                        }
+
+                        composable("basket") {
+                            BookingBasketScreen(
+                                viewModel = bookingViewModel,
+                                onBack = {
+                                    navController.popBackStack()
+                                },
+                                onBrowseClick = {
+                                    navController.navigate("browse") {
+                                        popUpTo("browse") {
+                                            inclusive = true
+                                        }
+                                    }
+                                }
+                            )
+                        }
+                    }
                 }
             }
         }

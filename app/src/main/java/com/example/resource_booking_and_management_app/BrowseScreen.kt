@@ -41,7 +41,7 @@ import android.util.Log
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BrowseScreen(viewModel: BookingViewModel, modifier: Modifier = Modifier) {
+fun BrowseScreen(viewModel: BookingViewModel, modifier: Modifier = Modifier, onBasketClick: () -> Unit) {
 
     var searchText by remember { mutableStateOf("") }
     var selectedSort by remember { mutableStateOf("Rating") }
@@ -49,6 +49,13 @@ fun BrowseScreen(viewModel: BookingViewModel, modifier: Modifier = Modifier) {
     val context = LocalContext.current
 
     val resources by viewModel.resources.collectAsState()
+
+    // Keeps track of how many days the user wants to rent
+    // the currently displayed resource.
+    var rentalDays by remember { mutableStateOf(1) }
+
+    // Controls whether the rental-day dropdown is visible.
+    var rentalDaysExpanded by remember { mutableStateOf(false) }
 
     // Keeps track of which resource is currently being displayed.
     // 0 = first resource, 1 = second resource, etc.
@@ -169,7 +176,7 @@ fun BrowseScreen(viewModel: BookingViewModel, modifier: Modifier = Modifier) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 16.dp),
+                    .padding(top = 0.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Start
             ) {
@@ -224,12 +231,56 @@ fun BrowseScreen(viewModel: BookingViewModel, modifier: Modifier = Modifier) {
                     )
                 }
             }
+
+            // Rental period selector
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 0.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text("Rental Period:")
+
+                TextButton(
+                    onClick = {
+                        rentalDaysExpanded = true
+                    }
+                ) {
+                    Text("$rentalDays day(s) ▼")
+                }
+
+                DropdownMenu(
+                    expanded = rentalDaysExpanded,
+                    onDismissRequest = {
+                        rentalDaysExpanded = false
+                    }
+                ) {
+                    // Provide rental options from 1 to 7 days.
+                    for (days in 1..7) {
+                        DropdownMenuItem(
+                            text = {
+                                Text("$days day(s)")
+                            },
+                            onClick = {
+                                rentalDays = days
+                                rentalDaysExpanded = false
+
+                                Log.d(
+                                    "BrowseScreen",
+                                    "Rental period changed to $days day(s)."
+                                )
+                            }
+                        )
+                    }
+                }
+            }
+
             Image(
                 painter = painterResource(id = R.drawable.logo),
                 contentDescription = "Bike and scooter rental logo",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 16.dp)
+                    .padding(top = 0.dp)
                     .height(150.dp),
                 contentScale = ContentScale.Fit
             )
@@ -342,8 +393,19 @@ fun BrowseScreen(viewModel: BookingViewModel, modifier: Modifier = Modifier) {
                 }
                 Button(
                     onClick = {
-                        val intent = Intent(context, BookingActivity::class.java)
-                        context.startActivity(intent)
+                        currentResource?.let { resource ->
+
+                            viewModel.addToBasket(
+                                resource = resource,
+                                days = rentalDays
+                            )
+
+                            Log.d(
+                                "BrowseScreen",
+                                "Booking button pressed. " +
+                                        "${resource.name} added to basket for $rentalDays day(s)."
+                            )
+                        }
                     },
                     modifier = Modifier
                         .padding(
@@ -357,7 +419,7 @@ fun BrowseScreen(viewModel: BookingViewModel, modifier: Modifier = Modifier) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 30.dp),
+                        .padding(top = 10.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     TextButton(
@@ -370,8 +432,12 @@ fun BrowseScreen(viewModel: BookingViewModel, modifier: Modifier = Modifier) {
 
                     TextButton(
                         onClick = {
-                            val intent = Intent(context, BookingBasket::class.java)
-                            context.startActivity(intent)
+                            onBasketClick()
+
+                            Log.d(
+                                "BrowseScreen",
+                                "Opening Booking Basket through Navigation Compose."
+                            )
                         }
                     ) {
                         Text("Basket")

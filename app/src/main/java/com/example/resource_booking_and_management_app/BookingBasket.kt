@@ -3,6 +3,7 @@ package com.example.resource_booking_and_management_app
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -13,6 +14,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.ui.Modifier
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import android.util.Log
 
 //Imports for the cards
 import androidx.compose.material3.Card
@@ -37,24 +41,32 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
-class BookingBasket : ComponentActivity() {
+/*class BookingBasket : ComponentActivity() {
+
+    // Use the BookingViewModel for the basket's shared application state.
+    private val bookingViewModel: BookingViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
             BookingBasketScreen(
+                viewModel = bookingViewModel,
                 onBack = {
                     finish()
                 }
             )
         }
     }
-}
+}*/
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BookingBasketScreen(onBack: () -> Unit) {
+fun BookingBasketScreen(viewModel: BookingViewModel, onBack: () -> Unit, onBrowseClick: () -> Unit) {
+
+    val basketResource by viewModel.basketResource.collectAsState()
+    val basketDays by viewModel.basketDays.collectAsState()
+    val credits by viewModel.credits.collectAsState()
 
     Scaffold(
         topBar = {
@@ -82,124 +94,157 @@ fun BookingBasketScreen(onBack: () -> Unit) {
                     start = 110.dp
                 )
             )
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 25.dp, start = 5.dp, end = 16.dp)
-            ) {
-                Column(
-                    modifier = Modifier.padding(15.dp)
+            if (basketResource == null) {
+
+                Text(
+                    text = "Your basket is empty. Add a bike or scooter from Browse.",
+                    fontSize = 25.sp,
+                    modifier = Modifier.padding(
+                        top = 30.dp,
+                        start = 40.dp,
+                        end = 20.dp
+                    )
+                )
+
+            } else {
+
+                val resource = basketResource!!
+                val total = resource.pricePerDay * basketDays
+                val remainingCredits = credits - total
+
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            top = 25.dp,
+                            start = 5.dp,
+                            end = 16.dp
+                        )
                 ) {
-                    Text(
-                        text = "City Cruiser Electric Bike",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-
-                    Text(
-                        text = "Melbourne CBD",
-                        fontSize = 16.sp,
-                        modifier = Modifier.padding(top = 5.dp)
-                    )
-
-                    Text(
-                        text = "Rental Period: 2 days",
-                        fontSize = 16.sp,
-                        modifier = Modifier.padding(top = 15.dp)
-                    )
-
-                    Text(
-                        text = "Price: 45 credits/day",
-                        fontSize = 16.sp,
-                        modifier = Modifier.padding(top = 5.dp)
-                    )
-
-                    Text(
-                        text = "Total: 90 Credits",
-                        fontSize = 16.sp,
-                        modifier = Modifier.padding(top = 5.dp)
-                    )
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 10.dp),
-                        horizontalArrangement = Arrangement.End
+                    Column(
+                        modifier = Modifier.padding(15.dp)
                     ) {
-                        Button(
-                            onClick = {
-                                // Remove booking
-                            },
+                        Text(
+                            text = "${resource.name} ${resource.category}",
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+
+                        Text(
+                            text = resource.location,
+                            fontSize = 16.sp,
+                            modifier = Modifier.padding(top = 5.dp)
+                        )
+
+                        Text(
+                            text = "Rental Period: $basketDays day(s)",
+                            fontSize = 16.sp,
+                            modifier = Modifier.padding(top = 15.dp)
+                        )
+
+                        Text(
+                            text = "Price: ${resource.pricePerDay} credits/day",
+                            fontSize = 16.sp,
+                            modifier = Modifier.padding(top = 5.dp)
+                        )
+
+                        Text(
+                            text = "Total: $total Credits",
+                            fontSize = 16.sp,
+                            modifier = Modifier.padding(top = 5.dp)
+                        )
+
+                        Row(
                             modifier = Modifier
-                                .width(140.dp)
-                                .height(40.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = Color.Red
-                            )
+                                .fillMaxWidth()
+                                .padding(top = 10.dp),
+                            horizontalArrangement = Arrangement.End
                         ) {
-                            Text("Remove")
+                            Button(
+                                onClick = {
+                                    viewModel.removeFromBasket()
+
+                                    Log.d(
+                                        "BookingBasket",
+                                        "Remove button pressed. Basket resource removed."
+                                    )
+                                },
+                                modifier = Modifier
+                                    .width(140.dp)
+                                    .height(40.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = Color.Red
+                                )
+                            ) {
+                                Text("Remove")
+                            }
                         }
                     }
                 }
-            }
-            Column(
-                modifier = Modifier.padding(top = 20.dp, start = 100.dp)
-            ) {
-                Text(
-                    text = "Total: 90 Credits",
-                    fontSize = 18.sp
-                )
 
-                Text(
-                    text = "Your Credits: 500 Credits",
-                    fontSize = 18.sp,
-                    modifier = Modifier.padding(top = 8.dp)
-                )
-
-                Text(
-                    text = "Remaining: 410 Credits",
-                    fontSize = 18.sp,
-                    modifier = Modifier.padding(top = 8.dp)
-                )
-            }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 50.dp),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Button(
-                    onClick = {
-                        // Clear
-                    }
-                ) {
-                    Text("Clear Basket")
-                }
-
-                Button(
-                    onClick = {
-                        // Book
-                    },
-                    modifier = Modifier.padding(start = 30.dp)
-
-                ) {
-                    Text("Book Now")
-                }
-            }
-            Canvas(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 240.dp)
-                    .height(2.dp)
-            )  {
-                drawLine(
-                    color = Color.Black,
-                    start = androidx.compose.ui.geometry.Offset(0f, 0f),
-                    end = androidx.compose.ui.geometry.Offset(size.width, 0f),
-                    strokeWidth = 5f,
-                    pathEffect = androidx.compose.ui.graphics.PathEffect.dashPathEffect(
-                        floatArrayOf(10f, 10f)
+                Column(
+                    modifier = Modifier.padding(
+                        top = 20.dp,
+                        start = 100.dp
                     )
-                )
+                ) {
+                    Text(
+                        text = "Total: $total Credits",
+                        fontSize = 18.sp
+                    )
+
+                    Text(
+                        text = "Your Credits: $credits Credits",
+                        fontSize = 18.sp,
+                        modifier = Modifier.padding(top = 8.dp)
+                    )
+
+                    Text(
+                        text = "Remaining: $remainingCredits Credits",
+                        fontSize = 18.sp,
+                        modifier = Modifier.padding(top = 8.dp)
+                    )
+                }
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 50.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Button(
+                        onClick = {
+                            // Clear
+                        }
+                    ) {
+                        Text("Clear Basket")
+                    }
+
+                    Button(
+                        onClick = {
+                            // Book
+                        },
+                        modifier = Modifier.padding(start = 30.dp)
+                    ) {
+                        Text("Book Now")
+                    }
+                }
+                Canvas(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 150.dp)
+                        .height(2.dp)
+                ) {
+                    drawLine(
+                        color = Color.Black,
+                        start = androidx.compose.ui.geometry.Offset(0f, 0f),
+                        end = androidx.compose.ui.geometry.Offset(size.width, 0f),
+                        strokeWidth = 5f,
+                        pathEffect = androidx.compose.ui.graphics.PathEffect.dashPathEffect(
+                            floatArrayOf(10f, 10f)
+                        )
+                    )
+                }
             }
             Row(
                 modifier = Modifier
@@ -209,7 +254,12 @@ fun BookingBasketScreen(onBack: () -> Unit) {
             ) {
                 TextButton(
                     onClick = {
-                        // Browse resource
+                        onBrowseClick()
+
+                        Log.d(
+                            "BookingBasket",
+                            "Browse button pressed. Returning to Browse screen."
+                        )
                     }
                 ) {
                     Text("Browse")
