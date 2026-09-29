@@ -18,6 +18,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import android.util.Log
 
+//Imports for sending resources
+import android.content.Intent
+import androidx.compose.ui.platform.LocalContext
+
 //Imports for the cards
 import androidx.compose.material3.Card
 import androidx.compose.foundation.layout.padding
@@ -67,6 +71,7 @@ fun BookingBasketScreen(viewModel: BookingViewModel, onBack: () -> Unit, onBrows
     val basketResource by viewModel.basketResource.collectAsState()
     val basketDays by viewModel.basketDays.collectAsState()
     val credits by viewModel.credits.collectAsState()
+    val context = LocalContext.current
 
     Scaffold(
         topBar = {
@@ -200,9 +205,9 @@ fun BookingBasketScreen(viewModel: BookingViewModel, onBack: () -> Unit, onBrows
                     )
 
                     Text(
-                        text = "Remaining: $remainingCredits Credits",
+                        text = "Remaining After Booking: $remainingCredits Credits",
                         fontSize = 18.sp,
-                        modifier = Modifier.padding(top = 8.dp)
+                        modifier = Modifier.padding(top = 8.dp, start = 0.dp)
                     )
                 }
 
@@ -222,7 +227,24 @@ fun BookingBasketScreen(viewModel: BookingViewModel, onBack: () -> Unit, onBrows
 
                     Button(
                         onClick = {
-                            // Book
+                            basketResource?.let { resource ->
+
+                                val intent = Intent(
+                                    context,
+                                    BookingActivity::class.java
+                                )
+
+                                intent.putExtra("resource", resource)
+                                intent.putExtra("rentalDays", basketDays)
+
+                                Log.d(
+                                    "BookingBasket",
+                                    "Sending resource to BookingActivity: ${resource.name}, " +
+                                            "Rental days: $basketDays"
+                                )
+
+                                context.startActivity(intent)
+                            }
                         },
                         modifier = Modifier.padding(start = 30.dp)
                     ) {
@@ -249,7 +271,7 @@ fun BookingBasketScreen(viewModel: BookingViewModel, onBack: () -> Unit, onBrows
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 30.dp),
+                    .padding(top = 10.dp),
                 horizontalArrangement = Arrangement.Center
             ) {
                 TextButton(

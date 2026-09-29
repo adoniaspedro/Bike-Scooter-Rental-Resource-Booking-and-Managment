@@ -3,6 +3,7 @@ package com.example.resource_booking_and_management_app
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.core.content.IntentCompat
 
 import androidx.compose.runtime.Composable
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -42,173 +43,229 @@ class ConfirmBooking : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContent {
-            ConfirmBookingScreen(
-                onBack = {
-                    finish()
-                }
-            )
-        }
-    }
-}
+        // Retrieve the customer's name that was entered
+        // on the BookingActivity screen.
+        val name = intent.getStringExtra("name") ?: ""
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ConfirmBookingScreen(onBack: () -> Unit) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                navigationIcon = {
-                    TextButton(
-                        onClick = onBack
-                    ) {
-                        Text("< Back")
+        // Retrieve the customer's email that was entered
+        // on the BookingActivity screen.
+        val email = intent.getStringExtra("email") ?: ""
+
+        // Resource implements Parcelable, so Android can
+        // transfer the entire Resource object through the Intent.
+        val resource = IntentCompat.getParcelableExtra(
+            intent,
+            "resource",
+            Resource::class.java
+        )
+
+        // Retrieve the number of rental days selected on the
+        // Browse screen.
+        val rentalDays = intent.getIntExtra(
+            "rentalDays",
+            1
+        )
+
+        // Only display the confirmation screen if a valid
+        // Resource was successfully received.
+        resource?.let {
+
+            setContent {
+                ConfirmBookingScreen(
+                    name = name,
+                    email = email,
+                    resource = it,
+                    rentalDays = rentalDays,
+                    onBack = {
+                        finish()
                     }
-                },
-                title = {}
-            )
-        }
-    ) { innerPadding ->
-
-        Column(
-            modifier = Modifier.padding(innerPadding)
-        ) {
-            Text(
-                text = "Confirm Booking",
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(
-                    start = 110.dp
-                )
-            )
-            Text(
-                text = "Resource",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(top = 25.dp, start = 5.dp)
-            )
-
-            Text(
-                text = "City Cruiser",
-                fontSize = 17.sp,
-                modifier = Modifier.padding(top = 8.dp, start = 5.dp)
-            )
-
-            Text(
-                text = "Electric Bike",
-                fontSize = 17.sp,
-                modifier = Modifier.padding(top = 4.dp, start = 5.dp)
-            )
-
-            Text(
-                text = "Location",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(top = 20.dp, start = 5.dp)
-            )
-
-            Text(
-                text = "Melbourne CBD",
-                fontSize = 17.sp,
-                modifier = Modifier.padding(top = 8.dp, start = 5.dp)
-            )
-
-            Text(
-                text = "Customer",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(top = 20.dp, start = 5.dp)
-            )
-
-            Text(
-                text = "Dorris Parton",
-                fontSize = 17.sp,
-                modifier = Modifier.padding(top = 8.dp, start = 5.dp)
-            )
-
-            Text(
-                text = "dorris@email.com",
-                fontSize = 17.sp,
-                modifier = Modifier.padding(top = 4.dp, start = 5.dp)
-            )
-
-            Text(
-                text = "Rental Period",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(top = 20.dp, start = 5.dp)
-            )
-
-            Text(
-                text = "2 days",
-                fontSize = 17.sp,
-                modifier = Modifier.padding(top = 8.dp, start = 5.dp)
-            )
-
-            Text(
-                text = "Price",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(top = 20.dp, start = 5.dp)
-            )
-
-            Text(
-                text = "45 credits / day",
-                fontSize = 17.sp,
-                modifier = Modifier.padding(top = 8.dp, start = 5.dp)
-            )
-            // Dotted horizontal line
-            Canvas(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 20.dp)
-                    .height(2.dp)
-            ) {
-                drawLine(
-                    color = Color.Black,
-                    start = androidx.compose.ui.geometry.Offset(0f, 0f),
-                    end = androidx.compose.ui.geometry.Offset(size.width, 0f),
-                    strokeWidth = 2f,
-                    pathEffect = androidx.compose.ui.graphics.PathEffect.dashPathEffect(
-                        floatArrayOf(10f, 10f)
-                    )
                 )
             }
-            Text(
-                text = "Total Credits: 90 Credits",
-                fontSize = 20.sp,
-                modifier = Modifier.padding(top = 30.dp, start = 5.dp)
-            )
-            Text(
-                text = "Remaining Credits After Booking: 410 Credits",
-                fontSize = 20.sp,
-                modifier = Modifier.padding(top = 20.dp, start = 5.dp)
-            )
-            Row(
-                modifier = Modifier.padding(top = 120.dp, start = 50.dp)
-            ) {
-                Button(
-                    onClick = {
-                        // Cancel action later
+        }
+    }
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun ConfirmBookingScreen(
+        name: String,
+        email: String,
+        resource: Resource,
+        rentalDays: Int,
+        onBack: () -> Unit
+    ) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    navigationIcon = {
+                        TextButton(
+                            onClick = onBack
+                        ) {
+                            Text("< Back")
+                        }
                     },
+                    title = {}
+                )
+            }
+        ) { innerPadding ->
+
+            Column(
+                modifier = Modifier.padding(innerPadding)
+            ) {
+                Text(
+                    text = "Confirm Booking",
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(
+                        start = 110.dp
+                    )
+                )
+                Text(
+                    text = "Resource",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(top = 25.dp, start = 5.dp)
+                )
+
+                // Displaying the actual resource selected by the user.
+                Text(
+                    text = resource.name,
+                    fontSize = 17.sp,
+                    modifier = Modifier.padding(top = 8.dp, start = 5.dp)
+                )
+
+                Text(
+                    text = resource.category,
+                    fontSize = 17.sp,
+                    modifier = Modifier.padding(top = 4.dp, start = 5.dp)
+                )
+
+                Text(
+                    text = "Location",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(top = 20.dp, start = 5.dp)
+                )
+
+                // Display the location belonging to the selected resource.
+                Text(
+                    text = resource.location,
+                    fontSize = 17.sp,
+                    modifier = Modifier.padding(top = 8.dp, start = 5.dp)
+                )
+
+                Text(
+                    text = "Customer",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(top = 20.dp, start = 5.dp)
+                )
+
+                // Display the name entered by the customer
+                // on the BookingActivity screen.
+                Text(
+                    text = name,
+                    fontSize = 17.sp,
+                    modifier = Modifier.padding(top = 8.dp, start = 5.dp)
+                )
+
+                // Display the email entered by the customer
+                // on the BookingActivity screen.
+                Text(
+                    text = email,
+                    fontSize = 17.sp,
+                    modifier = Modifier.padding(top = 4.dp, start = 5.dp)
+                )
+
+                Text(
+                    text = "Rental Period",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(top = 20.dp, start = 5.dp)
+                )
+
+                // The rental period was originally selected on the Browse
+                // screen and transferred through the Basket and BookingActivity.
+                Text(
+                    text = "$rentalDays day(s)",
+                    fontSize = 17.sp,
+                    modifier = Modifier.padding(top = 8.dp, start = 5.dp)
+                )
+
+                Text(
+                    text = "Price",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(top = 20.dp, start = 5.dp)
+                )
+
+                // Display the price of the actual selected resource.
+                Text(
+                    text = "${resource.pricePerDay} credits / day",
+                    fontSize = 17.sp,
+                    modifier = Modifier.padding(top = 8.dp, start = 5.dp)
+                )
+
+                // Dotted horizontal line
+                Canvas(
                     modifier = Modifier
-                        .width(150.dp)
-                        .height(50.dp)
-                        .padding(start = 5.dp)
+                        .fillMaxWidth()
+                        .padding(top = 20.dp)
+                        .height(2.dp)
                 ) {
-                    Text("Cancel")
+                    drawLine(
+                        color = Color.Black,
+                        start = androidx.compose.ui.geometry.Offset(0f, 0f),
+                        end = androidx.compose.ui.geometry.Offset(size.width, 0f),
+                        strokeWidth = 2f,
+                        pathEffect = androidx.compose.ui.graphics.PathEffect.dashPathEffect(
+                            floatArrayOf(10f, 10f)
+                        )
+                    )
                 }
 
-                Button(
-                    onClick = {
-                        // Click
-                    },
-                    modifier = Modifier
-                        .width(150.dp)
-                        .height(50.dp)
-                        .padding(start = 5.dp)
+                // Calculate the total booking cost using the resource's
+                // price per day multiplied by the selected rental period.
+                val totalCredits = resource.pricePerDay * rentalDays
+                Text(
+                    text = "Total Credits: $totalCredits Credits",
+                    fontSize = 20.sp,
+                    modifier = Modifier.padding(top = 30.dp, start = 5.dp)
+                )
+
+                val startingCredits = 500
+                val remainingCredits = startingCredits - totalCredits
+                Text(
+                    text = "Remaining Credits After Booking: $remainingCredits Credits",
+                    fontSize = 20.sp,
+                    modifier = Modifier.padding(top = 20.dp, start = 5.dp)
+                )
+
+                Row(
+                    modifier = Modifier.padding(top = 120.dp, start = 50.dp)
                 ) {
-                    Text("Confirm & Save")
+                    Button(
+                        onClick = {
+                            onBack() //return to the previous screen
+                        },
+                        modifier = Modifier
+                            .width(150.dp)
+                            .height(50.dp)
+                            .padding(start = 5.dp)
+                    ) {
+                        Text("Cancel")
+                    }
+
+                    Button(
+                        onClick = {
+                            // Click
+                        },
+                        modifier = Modifier
+                            .width(150.dp)
+                            .height(50.dp)
+                            .padding(start = 5.dp)
+                    ) {
+                        Text("Confirm & Save")
+                    }
                 }
             }
         }

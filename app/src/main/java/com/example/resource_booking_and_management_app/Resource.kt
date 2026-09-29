@@ -1,5 +1,9 @@
 package com.example.resource_booking_and_management_app
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class Resource(
     // Unique identifier for this resource.
     val id: String,
@@ -31,4 +35,4 @@ data class Resource(
 
     // Short description of the resource.
     val description: String
-)
+) : Parcelable
