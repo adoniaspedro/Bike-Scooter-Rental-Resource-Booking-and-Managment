@@ -66,7 +66,7 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BookingBasketScreen(viewModel: BookingViewModel, onBack: () -> Unit, onBrowseClick: () -> Unit) {
+fun BookingBasketScreen(viewModel: BookingViewModel, onBack: () -> Unit, onBrowseClick: () -> Unit, onBookNow: () -> Unit) {
 
     val basketResource by viewModel.basketResource.collectAsState()
     val basketDays by viewModel.basketDays.collectAsState()
@@ -227,24 +227,14 @@ fun BookingBasketScreen(viewModel: BookingViewModel, onBack: () -> Unit, onBrows
 
                     Button(
                         onClick = {
-                            basketResource?.let { resource ->
+                            // MainActivity is responsible for launching
+                            // BookingActivity through the Activity Result API.
+                            onBookNow()
 
-                                val intent = Intent(
-                                    context,
-                                    BookingActivity::class.java
-                                )
-
-                                intent.putExtra("resource", resource)
-                                intent.putExtra("rentalDays", basketDays)
-
-                                Log.d(
-                                    "BookingBasket",
-                                    "Sending resource to BookingActivity: ${resource.name}, " +
-                                            "Rental days: $basketDays"
-                                )
-
-                                context.startActivity(intent)
-                            }
+                            Log.d(
+                                "BookingBasket",
+                                "Book Now pressed. Requesting BookingActivity launch."
+                            )
                         },
                         modifier = Modifier.padding(start = 30.dp)
                     ) {

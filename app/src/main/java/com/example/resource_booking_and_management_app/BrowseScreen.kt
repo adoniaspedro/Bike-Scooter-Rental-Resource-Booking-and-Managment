@@ -49,6 +49,7 @@ fun BrowseScreen(viewModel: BookingViewModel, modifier: Modifier = Modifier, onB
     val context = LocalContext.current
 
     val resources by viewModel.resources.collectAsState()
+    val credits by viewModel.credits.collectAsState() // Observe the user's current credit balance.
 
     // Keeps track of how many days the user wants to rent
     // the currently displayed resource.
@@ -123,7 +124,7 @@ fun BrowseScreen(viewModel: BookingViewModel, modifier: Modifier = Modifier, onB
                 },
                 actions = {
                     Text(
-                        text = "500 Credits",
+                        text = "$credits Credits",
                         modifier = Modifier.padding(end = 16.dp)
                     )
                 }
