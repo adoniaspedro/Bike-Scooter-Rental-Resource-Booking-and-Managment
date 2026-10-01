@@ -162,6 +162,9 @@ class MainActivity : ComponentActivity() {
                                 modifier = Modifier,
                                 onBasketClick = {
                                     navController.navigate("basket")
+                                },
+                                onHistoryClick = {
+                                    navController.navigate("history")
                                 }
                             )
                         }
@@ -210,6 +213,28 @@ class MainActivity : ComponentActivity() {
                                         )
                                         bookingActivityLauncher.launch(intent)
                                     }
+                                },
+                                onHistoryClick = {
+                                    navController.navigate("history")
+                                }
+                            )
+                        }
+                        // Booking History destination.
+                        // This uses the SAME BookingViewModel as Browse and Basket.
+                        composable("history") {
+                            BookingHistoryScreen(
+                                viewModel = bookingViewModel,
+
+                                onBack = {
+                                    navController.popBackStack()
+                                },
+
+                                onBrowseClick = {
+                                    navController.navigate("browse")
+                                },
+
+                                onBasketClick = {
+                                    navController.navigate("basket")
                                 }
                             )
                         }

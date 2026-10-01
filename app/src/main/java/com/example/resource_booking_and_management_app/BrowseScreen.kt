@@ -36,12 +36,19 @@ import androidx.compose.ui.platform.LocalContext
 
 import androidx.compose.runtime.collectAsState
 
+// Imports for displaying Pop Up message
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
+
 // Import for Logging
 import android.util.Log
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BrowseScreen(viewModel: BookingViewModel, modifier: Modifier = Modifier, onBasketClick: () -> Unit) {
+fun BrowseScreen(viewModel: BookingViewModel, modifier: Modifier = Modifier,
+                 onBasketClick: () -> Unit, onHistoryClick: () -> Unit) {
 
     var searchText by remember { mutableStateOf("") }
     var selectedSort by remember { mutableStateOf("Rating") }
@@ -410,11 +417,11 @@ fun BrowseScreen(viewModel: BookingViewModel, modifier: Modifier = Modifier, onB
                     },
                     modifier = Modifier
                         .padding(
-                            start = 140.dp,
+                            start = 125.dp,
                             top = 10.dp
                         )
                 ) {
-                    Text("Booking")
+                    Text("Add to Basket")
                 }
 
                 Row(
@@ -446,8 +453,11 @@ fun BrowseScreen(viewModel: BookingViewModel, modifier: Modifier = Modifier, onB
 
                     TextButton(
                         onClick = {
-                            val intent = Intent(context, BookingHistory::class.java)
-                            context.startActivity(intent)
+                            Log.d(
+                                "BrowseScreen",
+                                "History button clicked. Navigating to Booking History."
+                            )
+                            onHistoryClick()
                         }
                     ) {
                         Text("History")

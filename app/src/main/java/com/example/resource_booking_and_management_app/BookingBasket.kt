@@ -66,7 +66,8 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BookingBasketScreen(viewModel: BookingViewModel, onBack: () -> Unit, onBrowseClick: () -> Unit, onBookNow: () -> Unit) {
+fun BookingBasketScreen(viewModel: BookingViewModel, onBack: () -> Unit,
+                        onBrowseClick: () -> Unit, onBookNow: () -> Unit, onHistoryClick: () -> Unit) {
 
     val basketResource by viewModel.basketResource.collectAsState()
     val basketDays by viewModel.basketDays.collectAsState()
@@ -279,7 +280,11 @@ fun BookingBasketScreen(viewModel: BookingViewModel, onBack: () -> Unit, onBrows
 
                 TextButton(
                     onClick = {
-                        // Basket resource
+                        Log.d(
+                            "BookingBasket",
+                            "History button clicked. Navigating to Booking History."
+                        )
+                        onHistoryClick()
                     },
                     modifier = Modifier.padding(start = 30.dp)
                 ) {

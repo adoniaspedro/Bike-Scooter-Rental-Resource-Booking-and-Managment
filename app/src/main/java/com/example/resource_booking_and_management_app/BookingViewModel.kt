@@ -235,6 +235,82 @@ class BookingViewModel : ViewModel() {
         return true
     }
 
+    fun cancelBooking(bookingId: String): Boolean {
+        Log.d(
+            TAG,
+            "Attempting to cancel booking: $bookingId"
+        )
+
+        // Find the booking using its Booking ID.
+        val booking = _bookingHistory.value.find {
+            it.id == bookingId
+        }
+
+        // If the booking cannot be found, cancellation cannot continue.
+        if (booking == null) {
+            Log.d(
+                TAG,
+                "Cancellation failed. Booking $bookingId was not found."
+            )
+            return false
+        }
+
+        Log.d(
+            TAG,
+            "Booking found. " +
+                    "Resource: ${booking.resource.name}, " +
+                    "Refund: ${booking.totalCredits} credits."
+        )
+
+        // Refund the credits used by this booking.
+        _credits.value += booking.totalCredits
+
+        Log.d(
+            TAG,
+            "Credits refunded: ${booking.totalCredits}. " +
+                    "New credit balance: ${_credits.value}"
+        )
+
+        // Restore the availability of the booked resource.
+        val updatedResources = _resources.value.map {
+
+            if (it.id == booking.resource.id) {
+
+                it.copy(
+                    availability = it.availability + 1
+                )
+
+            } else {
+                it
+            }
+        }
+
+        _resources.value = updatedResources
+
+        Log.d(
+            TAG,
+            "Resource availability restored for ${booking.resource.name}."
+        )
+
+        // Remove the cancelled booking from Booking History.
+        _bookingHistory.value =
+            _bookingHistory.value.filter {
+                it.id != bookingId
+            }
+
+        Log.d(
+            TAG,
+            "Booking $bookingId removed from Booking History."
+        )
+
+        Log.d(
+            TAG,
+            "Booking cancellation completed successfully."
+        )
+
+        return true
+    }
+
     // ViewModel cleanup
     override fun onCleared() {
         super.onCleared()
