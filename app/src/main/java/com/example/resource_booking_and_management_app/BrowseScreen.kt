@@ -33,6 +33,7 @@ import androidx.compose.ui.res.painterResource
 import android.content.Intent
 import androidx.compose.material3.Button
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 
 import androidx.compose.runtime.collectAsState
 
@@ -41,9 +42,12 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.rememberCoroutineScope
 import kotlinx.coroutines.launch
+import androidx.compose.runtime.remember
 
 // Import for Logging
 import android.util.Log
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.widthIn
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -68,6 +72,9 @@ fun BrowseScreen(viewModel: BookingViewModel, modifier: Modifier = Modifier,
     // Keeps track of which resource is currently being displayed.
     // 0 = first resource, 1 = second resource, etc.
     var currentResourceIndex by remember { mutableStateOf(0) }
+
+    val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
 
     // Filter resources based on the search text in the search bar
     val filteredResources = if (searchText.isBlank()) {
@@ -122,6 +129,15 @@ fun BrowseScreen(viewModel: BookingViewModel, modifier: Modifier = Modifier,
     )
 
     Scaffold(
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState,
+                modifier = Modifier
+                    .padding(bottom = 158.dp)
+                    .widthIn(max = 180.dp)
+                    .heightIn(max = 60.dp)
+            )
+        },
         modifier = modifier,
 
         topBar = {
@@ -413,6 +429,12 @@ fun BrowseScreen(viewModel: BookingViewModel, modifier: Modifier = Modifier,
                                 "Booking button pressed. " +
                                         "${resource.name} added to basket for $rentalDays day(s)."
                             )
+                            // Show confirmation message.
+                            coroutineScope.launch {
+                                snackbarHostState.showSnackbar(
+                                    message = "Added to Basket"
+                                )
+                            }
                         }
                     },
                     modifier = Modifier

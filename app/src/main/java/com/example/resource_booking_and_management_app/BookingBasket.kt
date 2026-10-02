@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import android.util.Log
+import androidx.compose.ui.unit.dp
 
 //Imports for sending resources
 import android.content.Intent
@@ -42,8 +43,17 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+
+//Imports for Snackbar pop message
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
 
 /*class BookingBasket : ComponentActivity() {
 
@@ -74,7 +84,17 @@ fun BookingBasketScreen(viewModel: BookingViewModel, onBack: () -> Unit,
     val credits by viewModel.credits.collectAsState()
     val context = LocalContext.current
 
+    val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
+
     Scaffold(
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState,
+                modifier = Modifier
+                    .padding(bottom = 70.dp)
+            )
+        },
         topBar = {
             TopAppBar(
                 navigationIcon = {
@@ -228,14 +248,36 @@ fun BookingBasketScreen(viewModel: BookingViewModel, onBack: () -> Unit,
 
                     Button(
                         onClick = {
-                            // MainActivity is responsible for launching
-                            // BookingActivity through the Activity Result API.
-                            onBookNow()
 
-                            Log.d(
-                                "BookingBasket",
-                                "Book Now pressed. Requesting BookingActivity launch."
-                            )
+                            // Check the 400 credit booking limit before
+                            // launching BookingActivity.
+                            if (total > 400) {
+
+                                Log.d(
+                                    "BookingBasket",
+                                    "Book Now rejected. " +
+                                            "Total cost of $total credits exceeds the 400 credit limit."
+                                )
+
+                                coroutineScope.launch {
+                                    snackbarHostState.showSnackbar(
+                                        message = "A booking cannot exceed 400 credits."
+                                    )
+                                }
+
+                            } else {
+
+                                // The booking is within the 400-credit limit,
+                                // so BookingActivity can be launched.
+                                Log.d(
+                                    "BookingBasket",
+                                    "Book Now accepted. " +
+                                            "Total cost: $total credits. " +
+                                            "Requesting BookingActivity launch."
+                                )
+
+                                onBookNow()
+                            }
                         },
                         modifier = Modifier.padding(start = 30.dp)
                     ) {
