@@ -1,8 +1,5 @@
 package com.example.resource_booking_and_management_app
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -16,11 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.ui.Alignment
 
 //Imports for the cards
 import androidx.compose.material3.Card
-import androidx.compose.foundation.layout.padding
 
 //Imports for the buttons
 import androidx.compose.material3.Button
@@ -52,11 +47,33 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 
+//Imports for Snackbarhost
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BookingHistoryScreen(viewModel: BookingViewModel, onBack: () -> Unit,
                          onBrowseClick: () -> Unit, onBasketClick: () -> Unit) {
+
+    // Controls the Snackbar message shown after
+    // a booking has been successfully cancelled.
+    val snackbarHostState = remember {
+        SnackbarHostState()
+    }
+    // Used to launch the Snackbar coroutine.
+    val coroutineScope = rememberCoroutineScope()
+
     Scaffold(
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState,
+                modifier = Modifier.padding(bottom = 100.dp)
+            )
+        },
         topBar = {
             TopAppBar(
                 navigationIcon = {
@@ -117,6 +134,7 @@ fun BookingHistoryScreen(viewModel: BookingViewModel, onBack: () -> Unit,
                 LazyColumn(
                     modifier = Modifier
                         .weight(1f)
+                        .fillMaxWidth()
                 ) {
                     items(bookingHistory) { booking ->
                         Card(
@@ -204,6 +222,13 @@ fun BookingHistoryScreen(viewModel: BookingViewModel, onBack: () -> Unit,
                                                     "BookingHistory",
                                                     "Booking ${booking.id} cancelled successfully."
                                                 )
+                                                // Show a confirmation message after the booking
+                                                // has been successfully cancelled.
+                                                coroutineScope.launch {
+                                                    snackbarHostState.showSnackbar(
+                                                        message = "Cancelled"
+                                                    )
+                                                }
 
                                             } else {
 
@@ -227,26 +252,13 @@ fun BookingHistoryScreen(viewModel: BookingViewModel, onBack: () -> Unit,
                         }
                     }
                 }
-                /*Canvas(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 210.dp)
-                        .height(2.dp)
-                ) {
-                    drawLine(
-                        color = Color.Black,
-                        start = androidx.compose.ui.geometry.Offset(0f, 0f),
-                        end = androidx.compose.ui.geometry.Offset(size.width, 0f),
-                        strokeWidth = 5f,
-                        pathEffect = androidx.compose.ui.graphics.PathEffect.dashPathEffect(
-                            floatArrayOf(10f, 10f)
-                        )
-                    )
-                }*/
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 30.dp),
+                        .padding(
+                            top = 10.dp,
+                            bottom = 10.dp
+                        ),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     TextButton(
