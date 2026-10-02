@@ -27,9 +27,6 @@ import androidx.compose.ui.unit.sp
 
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
-
-//Imports for the dotted horizontal line
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -38,10 +35,6 @@ import androidx.compose.ui.unit.dp
 
 // Import for Logging
 import android.util.Log
-
-// Imports for scrolling
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 
 //Imports for Lazy Column
 import androidx.compose.foundation.lazy.LazyColumn
@@ -259,7 +252,7 @@ fun BookingHistoryScreen(viewModel: BookingViewModel, onBack: () -> Unit,
                             top = 10.dp,
                             bottom = 10.dp
                         ),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    horizontalArrangement = Arrangement.Center
                 ) {
                     TextButton(
                         onClick = onBrowseClick

@@ -1,9 +1,5 @@
 package com.example.resource_booking_and_management_app
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -25,7 +21,6 @@ import androidx.compose.ui.platform.LocalContext
 
 //Imports for the cards
 import androidx.compose.material3.Card
-import androidx.compose.foundation.layout.padding
 
 //Imports for the buttons
 import androidx.compose.material3.Button
@@ -43,36 +38,15 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 
 //Imports for Snackbar pop message
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import com.example.resource_booking_and_management_app.ui.theme.Purple40
 import kotlinx.coroutines.launch
-
-/*class BookingBasket : ComponentActivity() {
-
-    // Use the BookingViewModel for the basket's shared application state.
-    private val bookingViewModel: BookingViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        setContent {
-            BookingBasketScreen(
-                viewModel = bookingViewModel,
-                onBack = {
-                    finish()
-                }
-            )
-        }
-    }
-}*/
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -202,7 +176,10 @@ fun BookingBasketScreen(viewModel: BookingViewModel, onBack: () -> Unit,
                                     containerColor = Color.Red
                                 )
                             ) {
-                                Text("Remove")
+                                Text(
+                                    text = "Remove",
+                                    fontSize = 18.sp
+                                )
                             }
                         }
                     }
@@ -240,14 +217,6 @@ fun BookingBasketScreen(viewModel: BookingViewModel, onBack: () -> Unit,
                 ) {
                     Button(
                         onClick = {
-                            // Clear
-                        }
-                    ) {
-                        Text("Clear Basket")
-                    }
-
-                    Button(
-                        onClick = {
 
                             // Check the 400 credit booking limit before
                             // launching BookingActivity.
@@ -279,7 +248,7 @@ fun BookingBasketScreen(viewModel: BookingViewModel, onBack: () -> Unit,
                                 onBookNow()
                             }
                         },
-                        modifier = Modifier.padding(start = 30.dp)
+                        modifier = Modifier.padding(start = 10.dp)
                     ) {
                         Text("Book Now")
                     }
@@ -291,10 +260,10 @@ fun BookingBasketScreen(viewModel: BookingViewModel, onBack: () -> Unit,
                         .height(2.dp)
                 ) {
                     drawLine(
-                        color = Color.Black,
+                        color = Purple40,
                         start = androidx.compose.ui.geometry.Offset(0f, 0f),
                         end = androidx.compose.ui.geometry.Offset(size.width, 0f),
-                        strokeWidth = 5f,
+                        strokeWidth = 10f,
                         pathEffect = androidx.compose.ui.graphics.PathEffect.dashPathEffect(
                             floatArrayOf(10f, 10f)
                         )

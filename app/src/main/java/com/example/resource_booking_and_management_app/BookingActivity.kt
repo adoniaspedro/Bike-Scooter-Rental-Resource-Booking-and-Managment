@@ -8,8 +8,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.Row
 import androidx.compose.ui.Alignment
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.ui.text.font.FontStyle
+import com.example.resource_booking_and_management_app.ui.theme.Resource_Booking_and_Management_AppTheme
 
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -52,9 +52,7 @@ import androidx.compose.ui.platform.LocalContext
 // Import for launching ConfirmBooking and receiving its result.
 import androidx.activity.result.contract.ActivityResultContracts
 
-
 class BookingActivity : ComponentActivity() {
-
     private val confirmBookingLauncher =
         registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
@@ -127,6 +125,17 @@ class BookingActivity : ComponentActivity() {
             "Current credits received: $currentCredits"
         )
 
+        // Retrieve the Light/Dark theme selected in MainActivity.
+        val isDarkTheme = intent.getBooleanExtra(
+            "isDarkTheme",
+            false
+        )
+
+        Log.d(
+            "BookingActivity",
+            "Theme received. Dark theme: $isDarkTheme"
+        )
+
         // BookingActivity cannot work without a selected resource.
         // If the resource was not passed correctly through the Intent,
         // log the problem and close this Activity.
@@ -149,76 +158,92 @@ class BookingActivity : ComponentActivity() {
         )
 
         setContent {
-            BookingScreen(
-                resource = resource,
-                rentalDays = rentalDays,
-                currentCredits = currentCredits,
+            Resource_Booking_and_Management_AppTheme(
+                darkTheme = isDarkTheme,
+                dynamicColor = false
+            ) {
+                BookingScreen(
+                    resource = resource,
+                    rentalDays = rentalDays,
+                    currentCredits = currentCredits,
 
-                // Back button simply closes BookingActivity.
-                onBack = {
-                    Log.d(
-                        "BookingActivity",
-                        "Back button pressed. Closing BookingActivity."
-                    )
+                    // Back button simply closes BookingActivity.
+                    onBack = {
+                        Log.d(
+                            "BookingActivity",
+                            "Back button pressed. Closing BookingActivity."
+                        )
 
-                    finish()
-                },
+                        finish()
+                    },
 
-                // This callback is triggered when the user presses Review
-                // after entering valid customer information.
-                onReviewBooking = { name, email ->
+                    // This callback is triggered when the user presses Review
+                    // after entering valid customer information.
+                    onReviewBooking = { name, email ->
 
-                    // Create an Intent for the final confirmation Activity.
-                    val confirmIntent = Intent(
-                        this@BookingActivity,
-                        ConfirmBooking::class.java
-                    )
+                        // Create an Intent for the final confirmation Activity.
+                        val confirmIntent = Intent(
+                            this@BookingActivity,
+                            ConfirmBooking::class.java
+                        )
 
-                    // Pass the customer's name to ConfirmBooking.
-                    confirmIntent.putExtra(
-                        "name",
-                        name
-                    )
+                        // Pass the current Light/Dark theme to ConfirmBooking.
+                        // ConfirmBooking
+                        confirmIntent.putExtra(
+                            "isDarkTheme",
+                            isDarkTheme
+                        )
+                        Log.d(
+                            "BookingActivity",
+                            "Passing theme to ConfirmBooking. Dark theme: $isDarkTheme"
+                        )
 
-                    // Pass the customer's email to ConfirmBooking.
-                    confirmIntent.putExtra(
-                        "email",
-                        email
-                    )
+                        // Pass the customer's name to ConfirmBooking.
+                        confirmIntent.putExtra(
+                            "name",
+                            name
+                        )
 
-                    // Pass the selected Resource.
-                    //
-                    // Resource implements Parcelable, so Android can transfer
-                    // the complete Resource object through the Intent.
-                    confirmIntent.putExtra(
-                        "resource",
-                        resource
-                    )
+                        // Pass the customer's email to ConfirmBooking.
+                        confirmIntent.putExtra(
+                            "email",
+                            email
+                        )
 
-                    // Pass the rental period selected on the Browse screen.
-                    confirmIntent.putExtra(
-                        "rentalDays",
-                        rentalDays
-                    )
+                        // Pass the selected Resource.
+                        //
+                        // Resource implements Parcelable, so Android can transfer
+                        // the complete Resource object through the Intent.
+                        confirmIntent.putExtra(
+                            "resource",
+                            resource
+                        )
 
-                    // remaining balance after the booking.
-                    confirmIntent.putExtra(
-                        "currentCredits",
-                        currentCredits
-                    )
+                        // Pass the rental period selected on the Browse screen.
+                        confirmIntent.putExtra(
+                            "rentalDays",
+                            rentalDays
+                        )
 
-                    Log.d(
-                        "BookingActivity",
-                        "Launching ConfirmBooking through Activity Result API. " +
-                                "Name: $name, " +
-                                "Resource: ${resource.name}, " +
-                                "Rental days: $rentalDays"
-                    )
+                        // remaining balance after the booking.
+                        confirmIntent.putExtra(
+                            "currentCredits",
+                            currentCredits
+                        )
 
-                    // Launch ConfirmBooking and wait for its result.
-                    confirmBookingLauncher.launch(confirmIntent)
-                }
-            )
+                        Log.d(
+                            "BookingActivity",
+                            "Launching ConfirmBooking through Activity Result API. " +
+                                    "Name: $name, " +
+                                    "Resource: ${resource.name}, " +
+                                    "Rental days: $rentalDays"
+                        )
+
+                        // Launch ConfirmBooking and wait for its result.
+                        confirmBookingLauncher.launch(confirmIntent)
+                    }
+                )
+            }
         }
     }
 

@@ -49,9 +49,12 @@ import android.util.Log
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.widthIn
 
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BrowseScreen(viewModel: BookingViewModel, modifier: Modifier = Modifier,
+                 isDarkTheme: Boolean, onThemeToggle: () -> Unit,
                  onBasketClick: () -> Unit, onHistoryClick: () -> Unit) {
 
     var searchText by remember { mutableStateOf("") }
@@ -146,10 +149,38 @@ fun BrowseScreen(viewModel: BookingViewModel, modifier: Modifier = Modifier,
                     Text("Bike/Scooter Rental")
                 },
                 actions = {
-                    Text(
-                        text = "$credits Credits",
+                    Column(
+                        horizontalAlignment = Alignment.End,
                         modifier = Modifier.padding(end = 16.dp)
-                    )
+                    ) {
+
+                        // Button used to switch between Light and Dark mode.
+                        TextButton(
+                            onClick = {
+                                Log.d(
+                                    "BrowseScreen",
+                                    "Theme toggle button clicked. " +
+                                            "Switching to ${if (isDarkTheme) "Light" else "Dark"} theme."
+                                )
+
+                                onThemeToggle()
+                            }
+                        ) {
+                            Text(
+                                text = if (isDarkTheme) {
+                                    "☀ Light"
+                                } else {
+                                    "☾ Dark"
+                                },
+                                fontSize = 25.sp
+                            )
+                        }
+
+                        // Displays the user's current credit balance.
+                        Text(
+                            text = "$credits Credits"
+                        )
+                    }
                 }
             )
         }
