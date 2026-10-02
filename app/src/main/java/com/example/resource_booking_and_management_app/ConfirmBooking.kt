@@ -39,6 +39,13 @@ import androidx.compose.ui.graphics.Color
 import android.content.Intent
 import androidx.compose.ui.platform.LocalContext
 
+//imports for the Snackbarhost
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
+
 class ConfirmBooking : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -106,7 +113,18 @@ class ConfirmBooking : ComponentActivity() {
         currentCredits: Int,
         onBack: () -> Unit
     ) {
+        // Controls the Snackbar message shown to the user.
+        val snackbarHostState = remember { SnackbarHostState() }
+        // Used to launch the Snackbar coroutine.
+        val coroutineScope = rememberCoroutineScope()
+
         Scaffold(
+            snackbarHost = {
+                SnackbarHost(
+                    hostState = snackbarHostState,
+                    modifier = Modifier.padding(bottom = 110.dp)
+                )
+            },
             topBar = {
                 TopAppBar(
                     navigationIcon = {
@@ -278,60 +296,92 @@ class ConfirmBooking : ComponentActivity() {
                                         "Customer: $name, " +
                                         "Resource: ${resource.name}, " +
                                         "Rental days: $rentalDays, " +
-                                        "Total: $totalCredits credits."
+                                        "Total: $totalCredits credits, " +
+                                        "Current balance: $currentCredits credits."
                             )
 
-                            // Create an Intent containing the final booking information.
-                            // This Intent will be returned to BookingActivity.
-                            val resultIntent = Intent().apply {
+                            // Check whether the booking costs more than
+                            // the customer's remaining credit balance.
+                            if (totalCredits > currentCredits) {
 
-                                // Return the customer's name.
-                                putExtra(
-                                    "name",
-                                    name
+                                Log.d(
+                                    "ConfirmBooking",
+                                    "Booking rejected. " +
+                                            "Required: $totalCredits credits, " +
+                                            "but only $currentCredits credits are available."
                                 )
 
-                                // Return the customer's email.
-                                putExtra(
-                                    "email",
-                                    email
+                                // Show a message to the user instead of
+                                // continuing with the booking.
+                                coroutineScope.launch {
+                                    snackbarHostState.showSnackbar(
+                                        message = "You don't have enough Credits"
+                                    )
+                                }
+
+                            } else {
+
+                                // The customer has enough credits,
+                                // so continue with the booking.
+
+                                Log.d(
+                                    "ConfirmBooking",
+                                    "Credit balance check passed. " +
+                                            "Proceeding with booking confirmation."
                                 )
 
-                                // Return the Resource using Parcelable.
-                                putExtra(
-                                    "resource",
-                                    resource
+                                // Create an Intent containing the final booking information.
+                                // This Intent will be returned to BookingActivity.
+                                val resultIntent = Intent().apply {
+
+                                    // Return the customer's name.
+                                    putExtra(
+                                        "name",
+                                        name
+                                    )
+
+                                    // Return the customer's email.
+                                    putExtra(
+                                        "email",
+                                        email
+                                    )
+
+                                    // Return the Resource using Parcelable.
+                                    putExtra(
+                                        "resource",
+                                        resource
+                                    )
+
+                                    // Return the rental period.
+                                    putExtra(
+                                        "rentalDays",
+                                        rentalDays
+                                    )
+
+                                    // Return the calculated total cost.
+                                    putExtra(
+                                        "totalCredits",
+                                        totalCredits
+                                    )
+                                }
+
+                                // Tell Android that the confirmation was successful.
+                                setResult(
+                                    RESULT_OK,
+                                    resultIntent
                                 )
 
-                                // Return the rental period.
-                                putExtra(
-                                    "rentalDays",
-                                    rentalDays
+                                Log.d(
+                                    "ConfirmBooking",
+                                    "Booking confirmed successfully. " +
+                                            "Returning booking data to BookingActivity."
                                 )
 
-                                // Return the calculated total cost.
-                                putExtra(
-                                    "totalCredits",
-                                    totalCredits
-                                )
+                                // Close ConfirmBooking.
+                                // This causes the Activity Result launcher inside
+                                // BookingActivity to receive RESULT_OK.
+                                finish()
                             }
-
-                            // Tell Android that the confirmation was successful.
-                            setResult(
-                                RESULT_OK,
-                                resultIntent
-                            )
-
-                            Log.d(
-                                "ConfirmBooking",
-                                "Booking confirmed successfully. " +
-                                        "Returning booking data to BookingActivity."
-                            )
-
-                            // Close ConfirmBooking.
-                            // This causes the Activity Result launcher inside
-                            // BookingActivity to receive RESULT_OK.
-                            finish()
                         },
                         modifier = Modifier
                             .width(150.dp)

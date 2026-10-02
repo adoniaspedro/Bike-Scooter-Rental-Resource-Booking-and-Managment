@@ -52,22 +52,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 
-/*class BookingHistory : ComponentActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        setContent {
-            BookingHistoryScreen(
-                viewModel = BookingViewModel(),
-                onBack = {
-                    finish()
-                }
-            )
-        }
-    }
-}*/
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BookingHistoryScreen(viewModel: BookingViewModel, onBack: () -> Unit,
