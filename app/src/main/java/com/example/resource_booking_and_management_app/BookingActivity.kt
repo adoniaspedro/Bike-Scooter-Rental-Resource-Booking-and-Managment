@@ -449,7 +449,14 @@ class BookingActivity : ComponentActivity() {
                     ) {
                         Button(
                             onClick = {
-                                // Cancel action later
+                                // Close BookingActivity and return to the
+                                // booking basket screen underneath it.
+                                Log.d(
+                                    "BookingActivity",
+                                    "Cancel button pressed. Returning to Booking Basket."
+                                )
+
+                                finish()
                             },
                             modifier = Modifier
                                 .width(100.dp)
