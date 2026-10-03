@@ -45,6 +45,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import com.example.resource_booking_and_management_app.ui.theme.Purple40
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -73,7 +74,10 @@ fun BookingHistoryScreen(viewModel: BookingViewModel, onBack: () -> Unit,
                     TextButton(
                         onClick = onBack
                     ) {
-                        Text("< Back")
+                        Text(
+                            text = "< Back",
+                            fontSize = 20.sp
+                        )
                     }
                 },
                 title = {}
@@ -90,6 +94,7 @@ fun BookingHistoryScreen(viewModel: BookingViewModel, onBack: () -> Unit,
 
             Text(
                 text = "Booking History",
+                color = Purple40,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(start = 110.dp)
@@ -107,6 +112,7 @@ fun BookingHistoryScreen(viewModel: BookingViewModel, onBack: () -> Unit,
                 ) {
                     Text(
                         text = "No Active Bookings.",
+                        color = Purple40,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -257,13 +263,19 @@ fun BookingHistoryScreen(viewModel: BookingViewModel, onBack: () -> Unit,
                     TextButton(
                         onClick = onBrowseClick
                     ) {
-                        Text("Browse")
+                        Text(
+                            text = "Browse",
+                            fontSize = 20.sp
+                        )
                     }
 
                     TextButton(
                         onClick = onBasketClick
                     ) {
-                        Text("Basket")
+                        Text(
+                            text = "Basket",
+                            fontSize = 20.sp
+                        )
                     }
                 }
             }

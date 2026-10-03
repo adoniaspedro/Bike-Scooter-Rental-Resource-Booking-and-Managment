@@ -34,5 +34,8 @@ data class Resource(
     val rangeKm: Int,
 
     // Short description of the resource.
-    val description: String
+    val description: String,
+
+    // Drawable resource ID for the bike/scooter image.
+    val imageResId: Int
 ) : Parcelable

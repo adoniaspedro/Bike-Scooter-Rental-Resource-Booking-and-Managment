@@ -1,6 +1,7 @@
 package com.example.resource_booking_and_management_app
 
-//Fixed in-memory collection of resources that are available.
+import com.example.resource_booking_and_management_app.R
+
 
 val resourceList = listOf(
 
@@ -14,7 +15,9 @@ val resourceList = listOf(
         pricePerDay = 58,
         availability = 6,
         rangeKm = 80,
-        description = "A comfortable electric bike designed for city travel."
+        description = "A comfortable electric bike designed for city travel.",
+        imageResId = R.drawable.city_cruiser
+
     ),
 
     Resource(
@@ -27,7 +30,8 @@ val resourceList = listOf(
         pricePerDay = 35,
         availability = 8,
         rangeKm = 50,
-        description = "A lightweight electric scooter suitable for short city trips."
+        description = "A lightweight electric scooter suitable for short city trips.",
+        imageResId = R.drawable.city_explorer
     ),
 
     Resource(
@@ -40,7 +44,8 @@ val resourceList = listOf(
         pricePerDay = 40,
         availability = 4,
         rangeKm = 0,
-        description = "A durable mountain bike designed for trails and off-road riding."
+        description = "A durable mountain bike designed for trails and off-road riding.",
+        imageResId = R.drawable.mountain_pro
     ),
 
     Resource(
@@ -53,7 +58,8 @@ val resourceList = listOf(
         pricePerDay = 30,
         availability = 5,
         rangeKm = 45,
-        description = "A compact scooter designed for convenient urban transportation."
+        description = "A compact scooter designed for convenient urban transportation.",
+        imageResId = R.drawable.urban_glide
     ),
 
     Resource(
@@ -66,7 +72,8 @@ val resourceList = listOf(
         pricePerDay = 38,
         availability = 3,
         rangeKm = 0,
-        description = "A lightweight road bike designed for longer rides and cycling routes."
+        description = "A lightweight road bike designed for longer rides and cycling routes.",
+        imageResId = R.drawable.road_runner
     ),
 
     Resource(
@@ -79,6 +86,7 @@ val resourceList = listOf(
         pricePerDay = 60,
         availability = 7,
         rangeKm = 55,
-        description = "A fast and reliable electric scooter designed for everyday city travel."
+        description = "A fast and reliable electric scooter designed for everyday city travel.",
+        imageResId = R.drawable.metro_swift
     )
 )

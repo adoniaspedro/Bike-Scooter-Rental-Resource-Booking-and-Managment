@@ -14,9 +14,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import android.util.Log
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.font.FontStyle
 
 //Imports for sending resources
-import android.content.Intent
 import androidx.compose.ui.platform.LocalContext
 
 //Imports for the cards
@@ -75,7 +75,10 @@ fun BookingBasketScreen(viewModel: BookingViewModel, onBack: () -> Unit,
                     TextButton(
                         onClick = onBack
                     ) {
-                        Text("< Back")
+                        Text(
+                            text = "< Back",
+                            fontSize = 20.sp
+                        )
                     }
                 },
                 title = {}
@@ -88,6 +91,7 @@ fun BookingBasketScreen(viewModel: BookingViewModel, onBack: () -> Unit,
         ) {
             Text(
                 text = "Booking Basket",
+                color = Color(0xFF6650a4),
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(
@@ -99,6 +103,7 @@ fun BookingBasketScreen(viewModel: BookingViewModel, onBack: () -> Unit,
                 Text(
                     text = "Your basket is empty. Add a bike or scooter from Browse.",
                     fontSize = 25.sp,
+                    fontStyle = FontStyle.Italic,
                     modifier = Modifier.padding(
                         top = 30.dp,
                         start = 40.dp,
@@ -248,9 +253,12 @@ fun BookingBasketScreen(viewModel: BookingViewModel, onBack: () -> Unit,
                                 onBookNow()
                             }
                         },
-                        modifier = Modifier.padding(start = 10.dp)
+                        modifier = Modifier.padding(start = 1.dp)
                     ) {
-                        Text("Book Now")
+                        Text(
+                            text = "Book Now",
+                            fontSize = 25.sp
+                        )
                     }
                 }
                 Canvas(
@@ -273,7 +281,7 @@ fun BookingBasketScreen(viewModel: BookingViewModel, onBack: () -> Unit,
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 10.dp),
+                    .padding(top = 3.dp),
                 horizontalArrangement = Arrangement.Center
             ) {
                 TextButton(
@@ -286,7 +294,10 @@ fun BookingBasketScreen(viewModel: BookingViewModel, onBack: () -> Unit,
                         )
                     }
                 ) {
-                    Text("Browse")
+                    Text(
+                        text = "Browse",
+                        fontSize = 20.sp
+                    )
                 }
 
                 TextButton(
@@ -299,7 +310,10 @@ fun BookingBasketScreen(viewModel: BookingViewModel, onBack: () -> Unit,
                     },
                     modifier = Modifier.padding(start = 30.dp)
                 ) {
-                    Text("History")
+                    Text(
+                        text = "History",
+                        fontSize = 20.sp
+                    )
                 }
             }
         }

@@ -26,14 +26,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.height
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
 import androidx.compose.material3.TextButton
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import android.content.Intent
 import androidx.compose.material3.Button
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
 
 import androidx.compose.runtime.collectAsState
 
@@ -48,7 +47,7 @@ import androidx.compose.runtime.remember
 import android.util.Log
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.widthIn
-
+import com.example.resource_booking_and_management_app.ui.theme.Purple40
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -136,7 +135,7 @@ fun BrowseScreen(viewModel: BookingViewModel, modifier: Modifier = Modifier,
             SnackbarHost(
                 hostState = snackbarHostState,
                 modifier = Modifier
-                    .padding(bottom = 158.dp)
+                    .padding(bottom = 147.dp)
                     .widthIn(max = 180.dp)
                     .heightIn(max = 60.dp)
             )
@@ -146,7 +145,12 @@ fun BrowseScreen(viewModel: BookingViewModel, modifier: Modifier = Modifier,
         topBar = {
             TopAppBar(
                 title = {
-                    Text("Bike/Scooter Rental")
+                    Text(
+                        text = "Bike/Scooter Rental",
+                        color = Color(0xFF6650a4),
+                        fontSize = 26.sp,
+                        fontWeight = FontWeight.Bold
+                    )
                 },
                 actions = {
                     Column(
@@ -178,7 +182,8 @@ fun BrowseScreen(viewModel: BookingViewModel, modifier: Modifier = Modifier,
 
                         // Displays the user's current credit balance.
                         Text(
-                            text = "$credits Credits"
+                            text = "$credits Credits",
+                            fontSize = 20.sp
                         )
                     }
                 }
@@ -236,7 +241,10 @@ fun BrowseScreen(viewModel: BookingViewModel, modifier: Modifier = Modifier,
                 horizontalArrangement = Arrangement.Start
             ) {
 
-                Text("Sort:")
+                Text(
+                    text = "Sort:",
+                    fontSize = 18.sp
+                )
 
                 androidx.compose.material3.TextButton(
                     onClick = {
@@ -254,7 +262,7 @@ fun BrowseScreen(viewModel: BookingViewModel, modifier: Modifier = Modifier,
                 ) {
 
                     DropdownMenuItem(
-                        text = { Text("Rating") },
+                        text = { Text(text = "Rating", fontSize = 20.sp) },
                         onClick = {
                             selectedSort = "Rating"
                             sortExpanded = false
@@ -294,7 +302,10 @@ fun BrowseScreen(viewModel: BookingViewModel, modifier: Modifier = Modifier,
                     .padding(top = 0.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("Rental Period:")
+                Text(
+                    text = "Rental Period:",
+                    fontSize = 18.sp
+                )
 
                 TextButton(
                     onClick = {
@@ -330,55 +341,54 @@ fun BrowseScreen(viewModel: BookingViewModel, modifier: Modifier = Modifier,
                 }
             }
 
-            Image(
-                painter = painterResource(id = R.drawable.logo),
-                contentDescription = "Bike and scooter rental logo",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 0.dp)
-                    .height(150.dp),
-                contentScale = ContentScale.Fit
-            )
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 12.dp)
             ) {
                 currentResource?.let { resource ->
+                    Image(
+                        painter = painterResource(id = currentResource.imageResId),
+                        contentDescription = currentResource.name,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(150.dp),
+                        contentScale = ContentScale.Fit
+                    )
                     Text(
                         text = resource.name,
-                        fontSize = 22.sp,
+                        fontSize = 30.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(start = 115.dp)
                     )
 
                     Text(
                         text = resource.category,
-                        fontSize = 16.sp,
+                        fontSize = 20.sp,
                         modifier = Modifier.padding(top = 4.dp, start = 115.dp)
                     )
 
                     Text(
                         text = "⭐ ${resource.rating}",
-                        fontSize = 16.sp,
+                        fontSize = 20.sp,
                         modifier = Modifier.padding(top = 8.dp, start = 115.dp)
                     )
 
                     Text(
                         text = resource.year.toString(),
-                        fontSize = 16.sp,
+                        fontSize = 20.sp,
                         modifier = Modifier.padding(top = 4.dp, start = 115.dp)
                     )
 
                     Text(
                         text = resource.location,
-                        fontSize = 16.sp,
+                        fontSize = 20.sp,
                         modifier = Modifier.padding(top = 4.dp, start = 115.dp)
                     )
 
                     Text(
                         text = "${resource.pricePerDay} credits / day",
-                        fontSize = 16.sp,
+                        fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(top = 8.dp, start = 115.dp)
                     )
@@ -470,11 +480,14 @@ fun BrowseScreen(viewModel: BookingViewModel, modifier: Modifier = Modifier,
                     },
                     modifier = Modifier
                         .padding(
-                            start = 125.dp,
+                            start = 108.dp,
                             top = 10.dp
                         )
                 ) {
-                    Text("Add to Basket")
+                    Text(
+                        text = "Add to Basket",
+                        fontSize = 18.sp
+                    )
                 }
 
                 Row(
@@ -488,7 +501,10 @@ fun BrowseScreen(viewModel: BookingViewModel, modifier: Modifier = Modifier,
                             // Browse resource
                         }
                     ) {
-                        Text("Browse")
+                        Text(
+                            text = "Browse",
+                            fontSize = 18.sp
+                        )
                     }
 
                     TextButton(
@@ -501,7 +517,10 @@ fun BrowseScreen(viewModel: BookingViewModel, modifier: Modifier = Modifier,
                             )
                         }
                     ) {
-                        Text("Basket")
+                        Text(
+                            text = "Basket",
+                            fontSize = 18.sp
+                        )
                     }
 
                     TextButton(
@@ -513,7 +532,10 @@ fun BrowseScreen(viewModel: BookingViewModel, modifier: Modifier = Modifier,
                             onHistoryClick()
                         }
                     ) {
-                        Text("History")
+                        Text(
+                            text = "History",
+                            fontSize = 18.sp
+                        )
                     }
                 }
             }

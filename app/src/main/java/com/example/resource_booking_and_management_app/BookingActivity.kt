@@ -211,7 +211,6 @@ class BookingActivity : ComponentActivity() {
                         )
 
                         // Pass the selected Resource.
-                        //
                         // Resource implements Parcelable, so Android can transfer
                         // the complete Resource object through the Intent.
                         confirmIntent.putExtra(
@@ -271,7 +270,10 @@ class BookingActivity : ComponentActivity() {
                             TextButton(
                                 onClick = onBack
                             ) {
-                                Text("< Back")
+                                Text(
+                                    text = "< Back",
+                                    fontSize = 20.sp
+                                )
                             }
                         },
                         title = {}
@@ -286,23 +288,25 @@ class BookingActivity : ComponentActivity() {
 
                     // Resource information
                     Column(
-                        modifier = Modifier.padding(start = 140.dp)
+                        modifier = Modifier.padding(start = 0.dp) //140
                     ) {
                         Text(
                             text = "Booking Summary",
-                            fontSize = 22.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF6650a4),
+                            fontSize = 20.sp,
                             modifier = Modifier.padding(
                                 top = 12.dp,
-                                start = 0.dp
+                                start = 110.dp
                             )
                         )
 
                         Image(
-                            painter = painterResource(id = R.drawable.logo),
-                            contentDescription = "Bike and scooter rental logo",
+                            painter = painterResource(id = resource.imageResId),
+                            contentDescription = resource.name,
                             modifier = Modifier
-                                .padding(top = 16.dp)
-                                .height(120.dp),
+                                .fillMaxWidth()
+                                .height(150.dp),
                             contentScale = ContentScale.Fit
                         )
 
@@ -310,25 +314,25 @@ class BookingActivity : ComponentActivity() {
                             text = resource.name,
                             fontSize = 22.sp,
                             fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(top = 12.dp)
+                            modifier = Modifier.padding(top = 12.dp, start = 127.dp)
                         )
 
                         Text(
                             text = resource.category,
                             fontSize = 16.sp,
-                            modifier = Modifier.padding(top = 4.dp)
+                            modifier = Modifier.padding(top = 4.dp, start = 127.dp)
                         )
 
                         Text(
                             text = resource.location,
                             fontSize = 16.sp,
-                            modifier = Modifier.padding(top = 4.dp)
+                            modifier = Modifier.padding(top = 4.dp, start = 127.dp)
                         )
 
                         Text(
                             text = "⭐ ${resource.rating}",
                             fontSize = 16.sp,
-                            modifier = Modifier.padding(top = 8.dp)
+                            modifier = Modifier.padding(top = 8.dp, start = 127.dp)
                         )
                     }
 
@@ -336,14 +340,14 @@ class BookingActivity : ComponentActivity() {
                     Canvas(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 20.dp)
+                            .padding(top = 12.dp)
                             .height(2.dp)
                     ) {
                         drawLine(
-                            color = Color.Black,
+                            color = Color(0xFF6650a4),
                             start = androidx.compose.ui.geometry.Offset(0f, 0f),
                             end = androidx.compose.ui.geometry.Offset(size.width, 0f),
-                            strokeWidth = 2f,
+                            strokeWidth = 10f,
                             pathEffect = androidx.compose.ui.graphics.PathEffect.dashPathEffect(
                                 floatArrayOf(10f, 10f)
                             )
@@ -352,6 +356,7 @@ class BookingActivity : ComponentActivity() {
                     // Customer details
                     Text(
                         text = "Customer Details",
+                        color = Color(0xFF6650a4),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(top = 20.dp, start = 5.dp)
@@ -414,6 +419,7 @@ class BookingActivity : ComponentActivity() {
                     }
                     Text(
                         text = "Rental Period",
+                        color = Color(0xFF6650a4),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(top = 15.dp, start = 5.dp)
@@ -430,7 +436,7 @@ class BookingActivity : ComponentActivity() {
                         )
                     }
                     Row(
-                        modifier = Modifier.padding(top = 5.dp, start = 5.dp),
+                        modifier = Modifier.padding(top = 0.dp, start = 5.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
@@ -445,7 +451,7 @@ class BookingActivity : ComponentActivity() {
                         )
                     }
                     Row(
-                        modifier = Modifier.padding(top = 20.dp, start = 100.dp)
+                        modifier = Modifier.padding(top = 5.dp, start = 100.dp)
                     ) {
                         Button(
                             onClick = {
@@ -460,7 +466,7 @@ class BookingActivity : ComponentActivity() {
                             },
                             modifier = Modifier
                                 .width(100.dp)
-                                .height(50.dp)
+                                .height(45.dp)
                                 .padding(start = 5.dp)
                         ) {
                             Text("Cancel")
@@ -501,7 +507,7 @@ class BookingActivity : ComponentActivity() {
                             },
                             modifier = Modifier
                                 .width(100.dp)
-                                .height(50.dp)
+                                .height(45.dp)
                                 .padding(start = 5.dp)
                         ) {
                             Text("Review")

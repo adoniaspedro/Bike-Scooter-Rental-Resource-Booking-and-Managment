@@ -146,7 +146,10 @@ class ConfirmBooking : ComponentActivity() {
                             TextButton(
                                 onClick = onBack
                             ) {
-                                Text("< Back")
+                                Text(
+                                    text = "< Back",
+                                    fontSize = 20.sp
+                                )
                             }
                         },
                         title = {}
@@ -159,6 +162,7 @@ class ConfirmBooking : ComponentActivity() {
                 ) {
                     Text(
                         text = "Confirm Booking",
+                        color = Color(0xFF6650a4),
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(
@@ -167,6 +171,7 @@ class ConfirmBooking : ComponentActivity() {
                     )
                     Text(
                         text = "Resource",
+                        color = Color(0xFF6650a4),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(top = 25.dp, start = 5.dp)
@@ -187,6 +192,7 @@ class ConfirmBooking : ComponentActivity() {
 
                     Text(
                         text = "Location",
+                        color = Color(0xFF6650a4),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(top = 20.dp, start = 5.dp)
@@ -201,6 +207,7 @@ class ConfirmBooking : ComponentActivity() {
 
                     Text(
                         text = "Customer",
+                        color = Color(0xFF6650a4),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(top = 20.dp, start = 5.dp)
@@ -224,6 +231,7 @@ class ConfirmBooking : ComponentActivity() {
 
                     Text(
                         text = "Rental Period",
+                        color = Color(0xFF6650a4),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(top = 20.dp, start = 5.dp)
@@ -239,6 +247,7 @@ class ConfirmBooking : ComponentActivity() {
 
                     Text(
                         text = "Price",
+                        color = Color(0xFF6650a4),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(top = 20.dp, start = 5.dp)
@@ -285,7 +294,7 @@ class ConfirmBooking : ComponentActivity() {
                     )
 
                     Row(
-                        modifier = Modifier.padding(top = 120.dp, start = 50.dp)
+                        modifier = Modifier.padding(top = 90.dp, start = 50.dp)
                     ) {
                         Button(
                             onClick = {
