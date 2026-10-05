@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.core.content.IntentCompat
 import com.example.resource_booking_and_management_app.ui.theme.Resource_Booking_and_Management_AppTheme
-import androidx.compose.material3.MaterialTheme
 
 import androidx.compose.runtime.Composable
 import androidx.compose.material3.ExperimentalMaterial3Api

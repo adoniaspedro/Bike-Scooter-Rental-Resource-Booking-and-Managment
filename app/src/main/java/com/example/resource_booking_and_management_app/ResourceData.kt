@@ -1,8 +1,5 @@
 package com.example.resource_booking_and_management_app
 
-import com.example.resource_booking_and_management_app.R
-
-
 val resourceList = listOf(
 
     Resource(
