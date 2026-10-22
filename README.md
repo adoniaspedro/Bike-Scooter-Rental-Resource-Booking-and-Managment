@@ -1,4 +1,4 @@
-# Bike/Scooter Rental: Resource Booking and Management App
+# Bike/Scooter Rental: Resource Booking and Management
 
 Amdroid application for browsing, booking and managing bike and scooter rentals. You spend credits to rent a bike or scooter, review your booking before confirming it, and can cancel a booking later for a full refund. Built with Kotlin and Jetpack Compose (Material 3), using Navigation Compose and a shared `ViewModel`.
 
