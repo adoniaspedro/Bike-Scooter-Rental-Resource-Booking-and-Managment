@@ -59,7 +59,7 @@ fun BrowseScreen(viewModel: BookingViewModel, modifier: Modifier = Modifier,
     var searchText by remember { mutableStateOf("") }
     var selectedSort by remember { mutableStateOf("Rating") }
     var sortExpanded by remember { mutableStateOf(false) }
-    val context = LocalContext.current
+    //val context = LocalContext.current
 
     val resources by viewModel.resources.collectAsState()
     val credits by viewModel.credits.collectAsState() // Observe the user's current credit balance.
